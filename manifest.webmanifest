@@ -1,0 +1,17 @@
+{
+  "name": "Modul Matematik Tingkatan 5",
+  "short_name": "Matematik T5",
+  "description": "Modul Matematik Tingkatan 5 oleh Cikgu HAP, SMK Bugaya II Semporna. Boleh digunakan tanpa internet.",
+  "lang": "ms",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f8fc",
+  "theme_color": "#14284b",
+  "icons": [
+    { "src": "ikon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "ikon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

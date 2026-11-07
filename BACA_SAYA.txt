@@ -1,0 +1,27 @@
+MODUL MATEMATIK TINGKATAN 5 - CARA HOS
+=======================================
+
+Folder ini mengandungi 7 fail. JANGAN tukar nama fail.
+  index.html             - modul (8 bab)
+  manifest.webmanifest   - maklumat aplikasi (nama, ikon)
+  sw.js                  - membolehkan modul dibuka tanpa internet
+  ikon-*.png, apple-touch-icon.png - ikon di skrin utama telefon
+
+CARA 1: GITHUB PAGES (DISYORKAN - percuma, had bandwidth lebih besar)
+1. Daftar akaun di https://github.com dan cipta repository baharu (Public).
+2. Tekan "uploading an existing file" dan muat naik KESEMUA 7 fail (bukan folder).
+3. Settings > Pages > Branch: main > Save.
+4. Pautan: https://namaanda.github.io/nama-repository/
+
+CARA 2: NETLIFY (alternatif)
+1. Daftar akaun percuma di https://app.netlify.com/signup
+2. Buka https://app.netlify.com/drop
+3. Seret (drag) FOLDER "modul-matematik-t5" ke dalam kotak di laman itu.
+4. Tunggu sehingga siap. Anda akan dapat pautan seperti https://nama-rawak.netlify.app
+5. (Pilihan) Site configuration > Change site name untuk tukar nama pautan,
+   contohnya https://matematik-t5-bugaya.netlify.app
+
+KEMAS KINI MODUL PADA MASA HADAPAN
+1. Gantikan index.html dengan versi baharu.
+2. Buka sw.js dan tukar  VERSI = 'modul-t5-v1'  kepada  'modul-t5-v2'  (dan seterusnya).
+3. Muat naik semula. Telefon murid akan menerima versi baharu apabila dibuka dengan internet.
