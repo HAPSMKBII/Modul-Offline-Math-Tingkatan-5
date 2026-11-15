@@ -1,29 +1,29 @@
-/* Service worker: simpan modul dalam telefon supaya boleh dibuka tanpa internet.
-   Apabila anda memuat naik versi baharu modul, tukar nombor VERSI di bawah. */
-var VERSI = 'modul-t5-v4';
-var FAIL = ['./index.html', './manifest.webmanifest', './ikon-192.png', './ikon-512.png', './ikon-maskable-512.png', './apple-touch-icon.png'];
+// Modul Offline Matematik T5 — service worker
+// Tukar VERSI setiap kali index.html dikemas kini supaya telefon murid menerima versi baharu.
+const VERSI = 'modul-t5-v3.0-2026-11-15';
+const WAJIB = ['./index.html'];
+const PILIHAN = ['./', './manifest.webmanifest', './ikon-192.png', './ikon-512.png',
+  './ikon-maskable-512.png', './apple-touch-icon.png'];
 
-self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(VERSI).then(function (c) { return c.addAll(FAIL); }).then(function () { return self.skipWaiting(); }));
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(VERSI)
+    .then(c => c.addAll(WAJIB).then(() => Promise.all(PILIHAN.map(f => c.add(f).catch(() => {})))))
+    .then(() => self.skipWaiting()));
 });
-self.addEventListener('activate', function (e) {
-  e.waitUntil(caches.keys().then(function (k) {
-    return Promise.all(k.filter(function (n) { return n !== VERSI; }).map(function (n) { return caches.delete(n); }));
-  }).then(function () { return self.clients.claim(); }));
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== VERSI).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
 });
-/* Ambil dari simpanan telefon dahulu. Modul hanya dimuat turun semula apabila VERSI ditukar,
-   supaya kuota internet murid dan had bandwidth hos tidak dibazirkan. */
-self.addEventListener('fetch', function (e) {
-  if (e.request.method !== 'GET') return;
-  var url = new URL(e.request.url);
-  if (url.origin !== location.origin) return;
-  var key = e.request.mode === 'navigate' ? './index.html' : e.request;
-  e.respondWith(caches.open(VERSI).then(function (c) {
-    return c.match(key, { ignoreSearch: true }).then(function (simpanan) {
-      return simpanan || fetch(e.request).then(function (r) {
-        if (r && r.ok) c.put(key, r.clone());
-        return r;
-      });
-    });
-  }));
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  // Halaman: cuba rangkaian dahulu (dapat versi terbaru), guna cache jika luar talian
+  if (req.mode === 'navigate') {
+    e.respondWith(fetch(req).then(r => { const k = r.clone(); caches.open(VERSI).then(c => c.put('./index.html', k)); return r; })
+      .catch(() => caches.match('./index.html')));
+    return;
+  }
+  // Fail lain: cache dahulu
+  e.respondWith(caches.match(req).then(r => r || fetch(req)));
 });
