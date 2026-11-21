@@ -14,7 +14,7 @@
 
    Biarkan kosong ('') untuk MEMATIKAN kiraan.
    ================================================================= */
-var KIRAAN_KOD = '';
+var KIRAAN_KOD = 'sirhap';
 
 (function () {
   'use strict';
