@@ -1,8 +1,8 @@
 // Modul Offline Matematik T5 — service worker
 // Tukar VERSI setiap kali index.html dikemas kini supaya telefon murid menerima versi baharu.
-const VERSI = 'modul-t5-v3.0-2026-11-15';
+const VERSI = 'modul-t5-v3.1-2026-11-21';
 const WAJIB = ['./index.html'];
-const PILIHAN = ['./', './manifest.webmanifest', './ikon-192.png', './ikon-512.png',
+const PILIHAN = ['./', './manifest.webmanifest', './kiraan.js', './ikon-192.png', './ikon-512.png',
   './ikon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -15,15 +15,23 @@ self.addEventListener('activate', e => {
     .then(ks => Promise.all(ks.filter(k => k !== VERSI).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
+// Cuba rangkaian dahulu (dapat versi terbaru), guna cache jika luar talian
+function rangkaianDahulu(req, kunci) {
+  return fetch(req).then(r => {
+    if (r && r.ok) { const k = r.clone(); caches.open(VERSI).then(c => c.put(kunci, k)); }
+    return r;
+  }).catch(() => caches.match(kunci));
+}
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
-  // Halaman: cuba rangkaian dahulu (dapat versi terbaru), guna cache jika luar talian
-  if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).then(r => { const k = r.clone(); caches.open(VERSI).then(c => c.put('./index.html', k)); return r; })
-      .catch(() => caches.match('./index.html')));
-    return;
-  }
+  const url = new URL(req.url);
+  // Permintaan ke laman lain (cth. kiraan pengguna) tidak disentuh
+  if (url.origin !== self.location.origin) return;
+  // Halaman
+  if (req.mode === 'navigate') { e.respondWith(rangkaianDahulu(req, './index.html')); return; }
+  // Tetapan kiraan: sentiasa ambil versi terbaru supaya perubahan kod GoatCounter sampai ke telefon
+  if (url.pathname.endsWith('/kiraan.js')) { e.respondWith(rangkaianDahulu(req, './kiraan.js')); return; }
   // Fail lain: cache dahulu
   e.respondWith(caches.match(req).then(r => r || fetch(req)));
 });
