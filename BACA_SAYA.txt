@@ -1,15 +1,16 @@
 MODUL MATEMATIK TINGKATAN 5 - CARA HOS
 =======================================
 
-Folder ini mengandungi 7 fail. JANGAN tukar nama fail.
+Folder ini mengandungi 8 fail. JANGAN tukar nama fail.
   index.html             - modul (8 bab)
   manifest.webmanifest   - maklumat aplikasi (nama, ikon)
   sw.js                  - membolehkan modul dibuka tanpa internet
+  kiraan.js              - kiraan pengguna tanpa nama (pilihan)
   ikon-*.png, apple-touch-icon.png - ikon di skrin utama telefon
 
 CARA 1: GITHUB PAGES (DISYORKAN - percuma, had bandwidth lebih besar)
 1. Daftar akaun di https://github.com dan cipta repository baharu (Public).
-2. Tekan "uploading an existing file" dan muat naik KESEMUA 7 fail (bukan folder).
+2. Tekan "uploading an existing file" dan muat naik KESEMUA 8 fail (bukan folder).
 3. Settings > Pages > Branch: main > Save.
 4. Pautan: https://namaanda.github.io/nama-repository/
 
@@ -23,5 +24,31 @@ CARA 2: NETLIFY (alternatif)
 
 KEMAS KINI MODUL PADA MASA HADAPAN
 1. Gantikan index.html dengan versi baharu.
-2. Buka sw.js dan tukar  VERSI = 'modul-t5-v1'  kepada  'modul-t5-v2'  (dan seterusnya).
+2. Buka sw.js dan tukar  VERSI = 'modul-t5-v3.1-...'  kepada versi baharu
+   (contoh 'modul-t5-v3.2-2026-12-01').
 3. Muat naik semula. Telefon murid akan menerima versi baharu apabila dibuka dengan internet.
+
+KIRAAN PENGGUNA (BERAPA RAMAI MENGGUNAKAN MODUL)
+Kiraan menggunakan GoatCounter: percuma untuk kegunaan bukan komersial,
+tiada kuki, dan tiada nama atau markah murid direkodkan.
+1. Daftar di https://www.goatcounter.com/signup
+   - Code: pilih nama pendek, huruf kecil dan nombor sahaja (contoh: modult5bugaya)
+   - Isi e-mel dan kata laluan anda.
+2. Di GitHub, buka fail kiraan.js > tekan ikon pensel (Edit).
+3. Tukar baris   var KIRAAN_KOD = '';
+   kepada        var KIRAAN_KOD = 'modult5bugaya';   (guna kod anda)
+4. Tekan "Commit changes". Tidak perlu tukar sw.js untuk langkah ini.
+5. Lihat statistik di https://modult5bugaya.goatcounter.com (log masuk).
+
+Apa yang dikira:
+  /              modul dibuka dalam pelayar (sekali bagi setiap sesi)
+  /aplikasi      modul dibuka sebagai aplikasi yang dipasang ke skrin utama
+  bab-1 ... bab-8   bab yang dibuka
+  pasang-aplikasi   modul dipasang ke skrin utama
+Lajur "Visitors" menunjukkan anggaran bilangan pengguna berbeza bagi setiap hari.
+
+Nota:
+- Pembukaan tanpa internet disimpan dalam telefon dan dihantar apabila internet
+  kembali (dicatat pada tarikh dihantar).
+- Fail index.html yang dikongsi terus melalui WhatsApp/Telegram TIDAK dikira.
+- Untuk mematikan kiraan, kosongkan semula kod:  var KIRAAN_KOD = '';

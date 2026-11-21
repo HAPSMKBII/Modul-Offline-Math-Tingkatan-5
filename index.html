@@ -323,7 +323,7 @@ window.MUZIK=(function(){
   'use strict';
   var META=[[6, 6, 5], [6, 5, 5], [6, 6, 6], [6, 6, 6, 6], [6, 6, 6, 4], [6, 6, 6, 6], [6, 5, 6, 4, 5], [6, 6]];      /* misi bagi setiap modul, setiap bab */
   var CARDS=[{"i": "📈", "c": "#0c8181", "d": "#075c5c"}, {"i": "🔢", "c": "#4b4fc9", "d": "#2e318a"}, {"i": "🛡️", "c": "#c35037", "d": "#8f3320"}, {"i": "🧾", "c": "#9a6900", "d": "#7d5503"}, {"i": "🔺", "c": "#2b853a", "d": "#1b5a25"}, {"i": "📐", "c": "#c23a7a", "d": "#7f204e"}, {"i": "📊", "c": "#1f6fc1", "d": "#124479"}, {"i": "🧩", "c": "#7a3fc0", "d": "#4c2580"}];    /* {i, c, d} ikon dan warna (kontras AA) */
-  var VERSION='3.0';
+  var VERSION='3.1';
   var $=function(id){return document.getElementById(id)};
   function sGet(k){ try{ return localStorage.getItem(k) }catch(e){ return null } }
   function sSet(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
@@ -361,18 +361,23 @@ window.MUZIK=(function(){
     ms:'<p>Modul ulang kaji kendiri Matematik Tingkatan 5 (KSSM) untuk persediaan SPM. Semua kandungan berada dalam satu fail dan berfungsi tanpa internet.</p>'+
        '<div class="stats"><div><b>8</b><span>bab</span></div><div><b>__NM__</b><span>modul</span></div><div><b>__NS__</b><span>misi interaktif</span></div></div>'+
        '<h3>Cara belajar</h3><ul><li>Setiap misi menjana soalan baharu setiap kali, jadi latihan boleh diulang.</li><li>Jawapan betul pada cubaan pertama memberi bintang.</li><li>Butang “Saya tersangkut” memberi petunjuk berperingkat dan Petak Jawapan dengan langkah kerja.</li></ul>'+
-       '<h3>Privasi</h3><p>Kemajuan disimpan dalam pelayar peranti ini sahaja. Tiada data dihantar ke mana-mana pelayan.</p>'+
+       '<h3>Privasi</h3><p>Kemajuan disimpan dalam pelayar peranti ini sahaja.__KIRAAN__</p>'+
        '<h3>Kebolehcapaian</h3><p>Dwibahasa (Bahasa Melayu dan Inggeris), saiz teks boleh laras, animasi boleh dikurangkan, kontras warna mengikut WCAG AA pada muka depan, dan sokongan papan kekunci.</p>'+
        '<h3>Dwibahasa</h3><p>Semua kandungan, termasuk soalan, penjelasan dan bantuan, tersedia dalam Bahasa Melayu dan bahasa Inggeris. Tekan BM atau EN untuk bertukar bahasa.</p>'+
        '<h3>Kredit</h3><p>Dibangunkan oleh Cikgu HAP, SMK Bugaya II, Semporna, Sabah. Versi __VER__.</p>',
     en:'<p>A self-paced revision module for Form 5 Mathematics (Malaysian KSSM curriculum) in preparation for SPM. Everything is in one file and works without the internet.</p>'+
        '<div class="stats"><div><b>8</b><span>chapters</span></div><div><b>__NM__</b><span>modules</span></div><div><b>__NS__</b><span>interactive missions</span></div></div>'+
        '<h3>How to learn</h3><ul><li>Every mission generates new questions each time, so practice can be repeated.</li><li>A correct answer on the first try earns a star.</li><li>The “I\'m stuck” button gives staged hints and an Answer Box with the working.</li></ul>'+
-       '<h3>Privacy</h3><p>Progress is saved in this device\'s browser only. No data is sent to any server.</p>'+
+       '<h3>Privacy</h3><p>Progress is saved in this device\'s browser only.__KIRAAN__</p>'+
        '<h3>Accessibility</h3><p>Bilingual (Malay and English), adjustable text size, reducible animation, WCAG AA colour contrast on the home screen, and keyboard support.</p>'+
        '<h3>Bilingual</h3><p>All content, including questions, explanations and help, is available in Malay and English. Press BM or EN to switch languages.</p>'+
        '<h3>Credits</h3><p>Developed by Cikgu HAP, SMK Bugaya II, Semporna, Sabah. Version __VER__.</p>'
   };
+  var KIRAAN={
+    ms:[' Tiada data dihantar ke mana-mana pelayan.',' Apabila modul dibuka melalui laman web, bilangan pembukaan modul dan bab dikira tanpa nama untuk mengetahui jumlah pengguna. Tiada nama, markah atau kuki direkodkan.'],
+    en:[' No data is sent to any server.',' When the module is opened from the website, visits to the module and its chapters are counted anonymously to see how many people use it. No names, scores or cookies are recorded.']
+  };
+  function aboutHTML(){ return ABOUT[lang].replace('__NM__',NM).replace('__NS__',NS).replace('__VER__',VERSION).replace('__KIRAAN__',KIRAAN[lang][window.KIRAAN_AKTIF?1:0]) }
   var NM=0,NS=0; META.forEach(function(r){ NM+=r.length; r.forEach(function(n){ NS+=n }) });
 
   var lang=sGet('modulT5-lang')==='en'?'en':'ms';
@@ -574,7 +579,7 @@ window.MUZIK=(function(){
     document.querySelectorAll('[data-ia]').forEach(function(e){ e.setAttribute('aria-label',L(e.getAttribute('data-ia'))) });
     document.querySelectorAll('[data-lang]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===lang)) });
     $('homeBtn').textContent=L('home'); $('frame').title=L('frame');
-    $('aboutB').innerHTML=ABOUT[lang].replace('__NM__',NM).replace('__NS__',NS).replace('__VER__',VERSION);
+    $('aboutB').innerHTML=aboutHTML();
     document.title=cur>-1?(L('chap')+' '+(cur+1)+': '+TITLES[lang][cur]):L('title');
     $('note').classList.toggle('on',lang==='en' && cur>-1 && !HAPT_HAS(cur+1));
     if(cur>-1) paintView(); 
@@ -631,7 +636,7 @@ window.MUZIK=(function(){
   /* ================= Tetapan ================= */
   function dlg(d,openIt){ if(openIt){ if(d.showModal) d.showModal(); else d.setAttribute('open','') } else { if(d.close) d.close(); else d.removeAttribute('open') } }
   $('setBtn').onclick=$('setBtn2').onclick=function(){ MUZIK.click(); paintSet(); dlg($('setDlg'),true) };
-  $('aboutBtn').onclick=function(){ MUZIK.click(); dlg($('aboutDlg'),true) };
+  $('aboutBtn').onclick=function(){ MUZIK.click(); $('aboutB').innerHTML=aboutHTML(); dlg($('aboutDlg'),true) };
   document.querySelectorAll('[data-close]').forEach(function(b){ b.onclick=function(){ dlg(b.closest('dialog'),false) } });
   document.querySelectorAll('dialog').forEach(function(d){ d.addEventListener('click',function(e){ if(e.target===d) dlg(d,false) }) });
 
@@ -670,5 +675,6 @@ if('serviceWorker' in navigator){window.addEventListener('load',function(){
   var dah=false; navigator.serviceWorker.addEventListener('controllerchange',function(){ if(dah) return; dah=true; location.reload(); });
 });}
 </script>
+<script src="kiraan.js" defer></script>
 </body>
 </html>
